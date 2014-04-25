@@ -1,0 +1,13 @@
+require 'erb'
+
+task :default => :base_sh
+
+desc 'Generate base.sh with rhn auth'
+task :base_sh, [:username, :password] do |t, args|
+  if ! (args.username and args.password)
+    raise ArgumentError, "Missing username and password"
+  end
+  base_sh = ERB.new(File.read('base.sh.erb')).result(binding)
+  f = File.open('base.sh', 'w')
+  f.write(base_sh)
+end
